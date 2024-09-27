@@ -16,13 +16,25 @@ const config = {
 new Phaser.Game(config);
 
 function preload() {
-  console.log('preload');
   this.load.image('cloud', 'assets/scenery/overworld/cloud1.png');
-  this.load.spritesheet('mario', 'assets/entities/mario.png', { frameWidth: 18, frameHeight: 16 });
   this.load.image('floorbricks', 'assets/scenery/overworld/floorbricks.png');
+  this.load.spritesheet('mario', 'assets/entities/mario.png', { frameWidth: 18, frameHeight: 16 });
 }
 
 function create() {
+  this.anims.create({
+    key: 'mario-walk',
+    frames: this.anims.generateFrameNumbers('mario', { start: 1, end: 3 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
+  this.anims.create({
+    key: 'mario-idle',
+    frames: this.anims.generateFrameNumbers('mario', { start: 0, end: 0 }),
+    frameRate: 10,
+    repeat: -1
+  });
   this.add.image(150, 10, 'cloud').setScale(0.15).setOrigin(0, 0);
   this.mario = this.add.sprite(50, 215, 'mario').setOrigin(0, 1);
   this.add.tileSprite(0, config.height, config.width, 32, 'floorbricks').setOrigin(0, 1);
@@ -33,14 +45,15 @@ function create() {
 function update() {
   if (this.keys.right.isDown) {
     this.mario.x += 1;
+    this.mario.anims.play('mario-walk', true);
+    this.mario.flipX = false;
   }
   if (this.keys.left.isDown) {
     this.mario.x -= 1;
+    this.mario.anims.play('mario-walk', true);
+    this.mario.flipX = true;
   }
-  if (this.keys.up.isDown) {
-    this.mario.y -= 1;
-  }
-  if (this.keys.down.isDown) {
-    this.mario.y += 1;
+  else{
+    this.mario.anims.play('mario-idle', true);
   }
 }
