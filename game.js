@@ -35,6 +35,14 @@ function create() {
     frameRate: 10,
     repeat: -1
   });
+
+  this.anims.create({
+    key: 'mario-jump',
+    frames: this.anims.generateFrameNumbers('mario', { start: 4, end: 4 }),
+    frameRate: 10,
+    repeat: -1
+  });
+
   this.add.image(150, 10, 'cloud').setScale(0.15).setOrigin(0, 0);
   this.mario = this.add.sprite(50, 215, 'mario').setOrigin(0, 1);
   this.add.tileSprite(0, config.height, config.width, 32, 'floorbricks').setOrigin(0, 1);
