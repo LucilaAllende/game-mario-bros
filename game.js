@@ -44,9 +44,9 @@ function create() {
   });
 
   this.add.image(150, 10, 'cloud').setScale(0.15).setOrigin(0, 0);
-  this.mario = this.add.sprite(50, 215, 'mario').setOrigin(0, 1);
   this.add.tileSprite(0, config.height, config.width, 32, 'floorbricks').setOrigin(0, 1);
 
+  this.mario = this.add.sprite(50, 215, 'mario').setOrigin(0, 1);
   this.keys = this.input.keyboard.createCursorKeys();
 }
 
