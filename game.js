@@ -54,9 +54,17 @@ function create() {
   this.floor.create(0, config.height -32, 'floorbricks').setOrigin(0, 0).refreshBody();
   this.floor.create(150, config.height -32, 'floorbricks').setOrigin(0, 0).refreshBody();
 
-  this.mario = this.physics.add.sprite(50, 100, 'mario').setOrigin(0, 1);
+  this.mario = this.physics.add.sprite(50, 100, 'mario')
+  .setOrigin(0, 1)
+  .setCollideWorldBounds(true)
+  .setGravityY(350);
 
+  this.physics.world.setBounds(0, 0, 2000, config.height);
   this.physics.add.collider(this.mario, this.floor);
+
+  this.cameras.main.setBounds(0, 0, 2000, config.height);
+  this.cameras.main.startFollow(this.mario);
+
   this.keys = this.input.keyboard.createCursorKeys();
 }
 
@@ -75,8 +83,8 @@ function update() {
     this.mario.anims.play('mario-idle', true);
   }
 
-  if(this.keys.up.isDown){
-    this.mario.y -= 5;
+  if(this.keys.up.isDown && this.mario.body.touching.down){
+    this.mario.setVelocityY(-200);
     this.mario.anims.play('mario-jump', true);
   }
 }
