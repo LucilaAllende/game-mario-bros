@@ -1,5 +1,3 @@
-
-
 const config = {
   type: Phaser.AUTO,
   width: 256,
@@ -51,9 +49,14 @@ function create() {
   });
 
   this.add.image(150, 10, 'cloud').setScale(0.15).setOrigin(0, 0);
-  this.add.tileSprite(0, config.height, config.width, 32, 'floorbricks').setOrigin(0, 1);
 
-  this.mario = this.add.sprite(50, 215, 'mario').setOrigin(0, 1);
+  this.floor = this.physics.add.staticGroup();
+  this.floor.create(0, config.height -32, 'floorbricks').setOrigin(0, 0);
+  this.floor.create(100, config.height -32, 'floorbricks').setOrigin(0, 0);
+
+  this.mario = this.physics.add.sprite(50, 100, 'mario').setOrigin(0, 1);
+
+  this.physics.add.collider(this.mario, this.floor);
   this.keys = this.input.keyboard.createCursorKeys();
 }
 
