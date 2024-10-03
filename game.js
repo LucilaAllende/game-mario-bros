@@ -1,3 +1,5 @@
+import { createAnimations } from './animations.js';
+
 const config = {
   type: Phaser.AUTO,
   width: 256,
@@ -27,26 +29,8 @@ function preload() {
 }
 
 function create() {
-  this.anims.create({
-    key: 'mario-walk',
-    frames: this.anims.generateFrameNumbers('mario', { start: 1, end: 3 }),
-    frameRate: 10,
-    repeat: -1
-  });
 
-  this.anims.create({
-    key: 'mario-idle',
-    frames: this.anims.generateFrameNumbers('mario', { start: 0, end: 0 }),
-    frameRate: 10,
-    repeat: -1
-  });
-
-  this.anims.create({
-    key: 'mario-jump',
-    frames: this.anims.generateFrameNumbers('mario', { start: 4, end: 4 }),
-    frameRate: 10,
-    repeat: -1
-  });
+  createAnimations(this);
 
   this.add.image(150, 10, 'cloud').setScale(0.15).setOrigin(0, 0);
 
