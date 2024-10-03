@@ -71,4 +71,9 @@ function update() {
   else{
     this.mario.anims.play('mario-idle', true);
   }
+
+  if(this.keys.up.isDown){
+    this.mario.y -= 5;
+    this.mario.anims.play('mario-jump', true);
+  }
 }
