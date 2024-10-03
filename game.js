@@ -51,8 +51,8 @@ function create() {
   this.add.image(150, 10, 'cloud').setScale(0.15).setOrigin(0, 0);
 
   this.floor = this.physics.add.staticGroup();
-  this.floor.create(0, config.height -32, 'floorbricks').setOrigin(0, 0);
-  this.floor.create(100, config.height -32, 'floorbricks').setOrigin(0, 0);
+  this.floor.create(0, config.height -32, 'floorbricks').setOrigin(0, 0).refreshBody();
+  this.floor.create(150, config.height -32, 'floorbricks').setOrigin(0, 0).refreshBody();
 
   this.mario = this.physics.add.sprite(50, 100, 'mario').setOrigin(0, 1);
 
