@@ -19,5 +19,12 @@ export const createAnimations = (game) => {
     frameRate: 10,
     repeat: -1
   });
+
+  game.anims.create({
+    key: 'mario-dead',
+    frames: game.anims.generateFrameNumbers('mario', { start: 5, end: 5 }),
+    frameRate: 10,
+    repeat: -1
+  });
 }
 

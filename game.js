@@ -26,6 +26,7 @@ function preload() {
   this.load.image('cloud', 'assets/scenery/overworld/cloud1.png');
   this.load.image('floorbricks', 'assets/scenery/overworld/floorbricks.png');
   this.load.spritesheet('mario', 'assets/entities/mario.png', { frameWidth: 18, frameHeight: 16 });
+  this.load.audio('gameover', 'assets/sound/music/gameover.mp3');
 }
 
 function create() {
@@ -53,6 +54,7 @@ function create() {
 }
 
 function update() {
+  if(this.mario.isDead) return;
   if (this.keys.right.isDown) {
     this.mario.x += 1;
     this.mario.anims.play('mario-walk', true);
@@ -70,5 +72,22 @@ function update() {
   if(this.keys.up.isDown && this.mario.body.touching.down){
     this.mario.setVelocityY(-200);
     this.mario.anims.play('mario-jump', true);
+  }
+
+  if(this.mario.y >= config.height){
+    this.mario.isDead = true;
+    this.mario.anims.play('mario-dead', true);
+    this.mario.setCollideWorldBounds(false);
+    this.sound.add('gameover', {
+      loop: false,
+      volume: 0.5
+    }).play();
+    setTimeout(() => {
+      this.mario.setVelocityY(-200);
+    }, 100);
+
+    setTimeout(() => {
+      this.scene.restart();
+    }, 200);
   }
 }
