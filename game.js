@@ -1,5 +1,6 @@
 import { createAnimations } from './animations.js'
 import { checkControls } from './controls.js'
+import { initAudios, playAudio } from './audios.js'
 
 const config = {
   type: Phaser.AUTO,
@@ -28,7 +29,7 @@ function preload () {
   this.load.image('floorbricks', 'assets/scenery/overworld/floorbricks.png')
   this.load.spritesheet('mario', 'assets/entities/mario.png', { frameWidth: 18, frameHeight: 16 })
   this.load.spritesheet('goomba', 'assets/entities/overworld/goomba.png', { frameWidth: 16, frameHeight: 16 })
-  this.load.audio('gameover', 'assets/sound/music/gameover.mp3')
+  initAudios(this)
 }
 
 function onHitGoomba (mario, goomba) {
@@ -36,6 +37,7 @@ function onHitGoomba (mario, goomba) {
     goomba.anims.play('goomba-dead', true)
     goomba.setVelocity(0)
     mario.setVelocityY(-200)
+    playAudio('goomba-stomp', this)
     setTimeout(() => {
       goomba.destroy()
     }, 100)
@@ -79,16 +81,13 @@ function create () {
 
 function update () {
   checkControls(this)
-  const { mario, sound, scene } = this
+  const { mario, scene } = this
 
   if (mario.y >= config.height) {
     mario.isDead = true
     mario.anims.play('mario-dead', true)
     mario.setCollideWorldBounds(false)
-    sound.add('gameover', {
-      loop: false,
-      volume: 0.5
-    }).play()
+    playAudio('gameover', this, 0.2)
     setTimeout(() => {
       mario.setVelocityY(-200)
     }, 100)
