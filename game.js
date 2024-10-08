@@ -1,4 +1,5 @@
 import { createAnimations } from './animations.js';
+import { checkControls } from './controls.js';
 
 const config = {
   type: Phaser.AUTO,
@@ -54,39 +55,14 @@ function create() {
 }
 
 function update() {
-  const { keys, mario } = this;
-  const isMarioTouchingFloor = mario.body.touching.down;
-
-  const isLeftKeyDown = keys.left.isDown;
-  const isRightKeyDown = keys.right.isDown;
-  const isUpKeyDown = keys.up.isDown;
-
-  if(mario.isDead) return;
-
-  if (isLeftKeyDown) {
-    isMarioTouchingFloor && mario.anims.play('mario-walk', true);
-    mario.x -= 2;
-    mario.flipX = true;
-  }
-  if (isRightKeyDown) {
-    isMarioTouchingFloor &&  mario.anims.play('mario-walk', true);
-    mario.x += 2;
-    mario.flipX = false;
-  }
-  else if (isMarioTouchingFloor) {
-    mario.anims.play('mario-idle', true);
-  }
-
-  if(isUpKeyDown && isMarioTouchingFloor){
-    mario.setVelocityY(-300);
-    mario.anims.play('mario-jump', true);
-  }
+  checkControls(this);
+  const { mario, sound, scene } = this;
 
   if(mario.y >= config.height){
     mario.isDead = true;
     mario.anims.play('mario-dead', true);
     mario.setCollideWorldBounds(false);
-    this.sound.add('gameover', {
+    sound.add('gameover', {
       loop: false,
       volume: 0.5
     }).play();
@@ -95,7 +71,7 @@ function update() {
     }, 100);
 
     setTimeout(() => {
-      this.scene.restart();
+      scene.restart();
     }, 200);
   }
 }
