@@ -27,7 +27,22 @@ function preload() {
   this.load.image('cloud', 'assets/scenery/overworld/cloud1.png');
   this.load.image('floorbricks', 'assets/scenery/overworld/floorbricks.png');
   this.load.spritesheet('mario', 'assets/entities/mario.png', { frameWidth: 18, frameHeight: 16 });
+  this.load.spritesheet('goomba', 'assets/entities/overworld/goomba.png', { frameWidth: 16, frameHeight: 16 });
   this.load.audio('gameover', 'assets/sound/music/gameover.mp3');
+}
+
+function onHitGoomba(mario, goomba) {
+  if(mario.body.touching.down && goomba.body.touching.up){
+    goomba.anims.play('goomba-dead', true);
+    goomba.setVelocity(0);
+    mario.setVelocityY(-200);
+    setTimeout(() => {
+      goomba.destroy();
+    }, 100)
+
+  } else {
+    console.log('Game Over');
+  }
 }
 
 function create() {
@@ -45,8 +60,18 @@ function create() {
   .setCollideWorldBounds(true)
   .setGravityY(350);
 
+  this.goomba = this.physics.add.sprite(100, 100, 'goomba')
+  .setOrigin(0, 1)
+  .setCollideWorldBounds(true)
+  .setGravityY(350)
+  .setVelocityX(-50);
+
+  this.goomba.anims.play('goomba-walk', true);
+
   this.physics.world.setBounds(0, 0, 2000, config.height);
   this.physics.add.collider(this.mario, this.floor);
+  this.physics.add.collider(this.goomba, this.floor);
+  this.physics.add.collider(this.mario, this.goomba, onHitGoomba, null, this);
 
   this.cameras.main.setBounds(0, 0, 2000, config.height);
   this.cameras.main.startFollow(this.mario);
