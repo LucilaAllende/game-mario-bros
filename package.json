@@ -1,0 +1,12 @@
+{
+  "name": "game-mario-bros",
+  "version": "1.0.0",
+  "description": "Game Mario Bros",
+  "main": "index.js",
+  "eslintConfig": {
+    "extends": "standard"
+  },
+  "devDependencies": {
+    "standard": "^17.1.2"
+  }
+}
