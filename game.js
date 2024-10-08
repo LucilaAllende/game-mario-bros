@@ -20,7 +20,7 @@ const config = {
   }
 }
 
-new Phaser.Game(config);
+const game = new Phaser.Game(config);
 
 function preload() {
   this.load.image('cloud', 'assets/scenery/overworld/cloud1.png');
@@ -54,36 +54,44 @@ function create() {
 }
 
 function update() {
-  if(this.mario.isDead) return;
-  if (this.keys.right.isDown) {
-    this.mario.x += 1;
-    this.mario.anims.play('mario-walk', true);
-    this.mario.flipX = false;
+  const { keys, mario } = this;
+  const isMarioTouchingFloor = mario.body.touching.down;
+
+  const isLeftKeyDown = keys.left.isDown;
+  const isRightKeyDown = keys.right.isDown;
+  const isUpKeyDown = keys.up.isDown;
+
+  if(mario.isDead) return;
+
+  if (isLeftKeyDown) {
+    isMarioTouchingFloor && mario.anims.play('mario-walk', true);
+    mario.x -= 2;
+    mario.flipX = true;
   }
-  if (this.keys.left.isDown) {
-    this.mario.x -= 1;
-    this.mario.anims.play('mario-walk', true);
-    this.mario.flipX = true;
+  if (isRightKeyDown) {
+    isMarioTouchingFloor &&  mario.anims.play('mario-walk', true);
+    mario.x += 2;
+    mario.flipX = false;
   }
-  else{
-    this.mario.anims.play('mario-idle', true);
+  else if (isMarioTouchingFloor) {
+    mario.anims.play('mario-idle', true);
   }
 
-  if(this.keys.up.isDown && this.mario.body.touching.down){
-    this.mario.setVelocityY(-200);
-    this.mario.anims.play('mario-jump', true);
+  if(isUpKeyDown && isMarioTouchingFloor){
+    mario.setVelocityY(-300);
+    mario.anims.play('mario-jump', true);
   }
 
-  if(this.mario.y >= config.height){
-    this.mario.isDead = true;
-    this.mario.anims.play('mario-dead', true);
-    this.mario.setCollideWorldBounds(false);
+  if(mario.y >= config.height){
+    mario.isDead = true;
+    mario.anims.play('mario-dead', true);
+    mario.setCollideWorldBounds(false);
     this.sound.add('gameover', {
       loop: false,
       volume: 0.5
     }).play();
     setTimeout(() => {
-      this.mario.setVelocityY(-200);
+      mario.setVelocityY(-200);
     }, 100);
 
     setTimeout(() => {
