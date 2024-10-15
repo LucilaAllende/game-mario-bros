@@ -54,10 +54,16 @@ function onHitGoomba (mario, goomba) {
 function killMario (game) {
   const { mario, scene } = game
   if (mario.isDead) return
+
   mario.isDead = true
   mario.anims.play('mario-dead', true)
   mario.setCollideWorldBounds(false)
+
   playAudio('gameover', game, 0.2)
+
+  mario.body.checkCollision.none = true
+  mario.setVelocityX(0)
+
   setTimeout(() => {
     mario.setVelocityY(-200)
   }, 100)
