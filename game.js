@@ -1,6 +1,7 @@
 import { createAnimations } from './animations.js'
 import { checkControls } from './controls.js'
 import { initAudios, playAudio } from './audios.js'
+import { initSpritesheet } from './spritesheet.js'
 
 const config = {
   type: Phaser.AUTO,
@@ -27,8 +28,7 @@ const game = new Phaser.Game(config)
 function preload () {
   this.load.image('cloud', 'assets/scenery/overworld/cloud1.png')
   this.load.image('floorbricks', 'assets/scenery/overworld/floorbricks.png')
-  this.load.spritesheet('mario', 'assets/entities/mario.png', { frameWidth: 18, frameHeight: 16 })
-  this.load.spritesheet('goomba', 'assets/entities/overworld/goomba.png', { frameWidth: 16, frameHeight: 16 })
+  initSpritesheet(this)
   initAudios(this)
 }
 
