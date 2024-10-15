@@ -73,6 +73,11 @@ function killMario (game) {
   }, 200)
 }
 
+function collectCoin (mario, coin) {
+  coin.destroy()
+  playAudio('coin-pickup', this)
+}
+
 function create () {
   createAnimations(this)
 
@@ -94,6 +99,16 @@ function create () {
     .setVelocityX(-50)
 
   this.goomba.anims.play('goomba-walk', true)
+
+  this.coins = this.physics.add.staticGroup()
+  this.coins.create(200, 150, 'coin')
+    .setOrigin(0, 1)
+    .anims.play('coin-idle', true)
+  this.coins.create(250, 175, 'coin')
+    .setOrigin(0, 1)
+    .anims.play('coin-idle', true)
+
+  this.physics.add.overlap(this.mario, this.coins, collectCoin, null, this)
 
   this.physics.world.setBounds(0, 0, 2000, config.height)
   this.physics.add.collider(this.mario, this.floor)
