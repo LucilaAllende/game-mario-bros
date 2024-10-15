@@ -76,6 +76,28 @@ function killMario (game) {
 function collectCoin (mario, coin) {
   coin.destroy()
   playAudio('coin-pickup', this)
+
+  const scoreText = this.add.text(coin.x, coin.y, '+100', {
+    fontSize: config.width / 40,
+    color: '#fff',
+    fontFamily: 'pixel'
+  }).setOrigin(0, 1)
+
+  this.tweens.add({
+    targets: scoreText,
+    y: scoreText.y - 20,
+    duration: 500,
+    onComplete: () => {
+      this.tweens.add({
+        targets: scoreText,
+        alpha: 0,
+        duration: 1000,
+        onComplete: () => {
+          scoreText.destroy()
+        }
+      })
+    }
+  })
 }
 
 function create () {
