@@ -38,12 +38,33 @@ function onHitGoomba (mario, goomba) {
     goomba.setVelocity(0)
     mario.setVelocityY(-200)
     playAudio('goomba-stomp', this)
+
+    mario.body.checkCollision.none = true
+    mario.setVelocityX(0)
+
     setTimeout(() => {
       goomba.destroy()
     }, 100)
   } else {
     console.log('Game Over')
+    // killMario(this)
   }
+}
+
+function killMario (game) {
+  const { mario, scene } = game
+  if (mario.isDead) return
+  mario.isDead = true
+  mario.anims.play('mario-dead', true)
+  mario.setCollideWorldBounds(false)
+  playAudio('gameover', game, 0.2)
+  setTimeout(() => {
+    mario.setVelocityY(-200)
+  }, 100)
+
+  setTimeout(() => {
+    scene.restart()
+  }, 200)
 }
 
 function create () {
@@ -80,20 +101,10 @@ function create () {
 }
 
 function update () {
+  const { mario } = this
+
   checkControls(this)
-  const { mario, scene } = this
-
   if (mario.y >= config.height) {
-    mario.isDead = true
-    mario.anims.play('mario-dead', true)
-    mario.setCollideWorldBounds(false)
-    playAudio('gameover', this, 0.2)
-    setTimeout(() => {
-      mario.setVelocityY(-200)
-    }, 100)
-
-    setTimeout(() => {
-      scene.restart()
-    }, 200)
+    killMario(this)
   }
 }
