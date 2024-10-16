@@ -38,7 +38,9 @@ function onHitGoomba (mario, goomba) {
     goomba.anims.play('goomba-dead', true)
     goomba.setVelocity(0)
     mario.setVelocityY(-200)
+
     playAudio('goomba-stomp', this)
+    addToScore(200, mario, this)
 
     mario.body.checkCollision.none = true
     mario.setVelocityX(0)
@@ -74,22 +76,53 @@ function killMario (game) {
   }, 200)
 }
 
-function collectCoin (mario, coin) {
-  coin.destroy()
-  playAudio('coin-pickup', this)
+function collectItem (mario, item) {
+  const { texture: { key } } = item
+  item.destroy()
 
-  const scoreText = this.add.text(coin.x, coin.y, '+100', {
+  if (key === 'coin') {
+    playAudio('coin-pickup', this)
+    addToScore(100, mario, this)
+  } else if (key === 'supermushroom') {
+    playAudio('powerup', this)
+    this.physics.world.pause()
+    this.anims.pauseAll()
+
+    let i = 0
+    const interval = setInterval(() => {
+      mario.anims.play(i % 2 === 0 ? 'mario-grown-idle' : 'mario-grown-walk', true)
+      i++
+    }, 100)
+
+    mario.isBlocked = true
+    mario.isGrown = true
+
+    setTimeout(() => {
+      mario.setDispalySize(18, 32)
+      mario.body.setSize(18, 32)
+      mario.body.setOffset(0, 0)
+      mario.refreshBody()
+      mario.isBlocked = false
+      clearInterval(interval)
+      this.physics.world.resume()
+      this.anims.resumeAll()
+    }, 1000)
+  }
+}
+
+function addToScore (scoreToAdd, origin, game) {
+  const scoreText = game.add.text(origin.x, origin.y, `+${scoreToAdd}`, {
     fontSize: config.width / 40,
     color: '#fff',
     fontFamily: 'pixel'
   }).setOrigin(0, 1)
 
-  this.tweens.add({
+  game.tweens.add({
     targets: scoreText,
     y: scoreText.y - 20,
     duration: 500,
     onComplete: () => {
-      this.tweens.add({
+      game.tweens.add({
         targets: scoreText,
         alpha: 0,
         duration: 1000,
@@ -123,15 +156,17 @@ function create () {
 
   this.goomba.anims.play('goomba-walk', true)
 
-  this.coins = this.physics.add.staticGroup()
-  this.coins.create(200, 150, 'coin')
+  this.collectibles = this.physics.add.staticGroup()
+  this.collectibles.create(200, 150, 'coin')
     .setOrigin(0, 1)
     .anims.play('coin-idle', true)
-  this.coins.create(250, 175, 'coin')
+  this.collectibles.create(250, 175, 'coin')
     .setOrigin(0, 1)
     .anims.play('coin-idle', true)
 
-  this.physics.add.overlap(this.mario, this.coins, collectCoin, null, this)
+  this.collectibles.create(200, config.height - 40, 'supermushroom').anims.play('supermushroom-idle', true)
+
+  this.physics.add.overlap(this.mario, this.collectibles, collectItem, null, this)
 
   this.physics.world.setBounds(0, 0, 2000, config.height)
   this.physics.add.collider(this.mario, this.floor)
