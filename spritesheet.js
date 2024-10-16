@@ -16,6 +16,12 @@ const INIT_SPRITESHEET = [
     url: 'assets/collectibles/coin.png',
     frameWidth: 16,
     frameHeight: 16
+  },
+  {
+    key: 'mario-grown',
+    url: 'assets/entities/mario-grown.png',
+    frameWidth: 18,
+    frameHeight: 32
   }
 ]
 
