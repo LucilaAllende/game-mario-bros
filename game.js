@@ -28,6 +28,7 @@ const game = new Phaser.Game(config)
 function preload () {
   this.load.image('cloud', 'assets/scenery/overworld/cloud1.png')
   this.load.image('floorbricks', 'assets/scenery/overworld/floorbricks.png')
+  this.load.image('supermushroom', 'assets/collectibles/super-mushroom.png')
   initSpritesheet(this)
   initAudios(this)
 }
