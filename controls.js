@@ -29,8 +29,7 @@ export function checkControls ({ keys, mario }) {
     isMarioTouchingFloor && mario.anims.play(marioAnimations.walk, true)
     mario.x -= 2
     mario.flipX = true
-  }
-  if (isRightKeyDown) {
+  } else if (isRightKeyDown) {
     isMarioTouchingFloor && mario.anims.play(marioAnimations.walk, true)
     mario.x += 2
     mario.flipX = false
